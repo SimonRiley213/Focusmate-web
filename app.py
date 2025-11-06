@@ -147,7 +147,7 @@ with col1:
         st.session_state.break_ends_at = None
         st.session_state.abort_requested = False
         st.session_state.break_locked = False
-        st.experimental_rerun()
+        st.rerun()
 
     if stop:
         # Safe abort from user (not password-protected)
@@ -161,7 +161,7 @@ with col1:
             })
             st.session_state.status = "aborted"
             st.success("Session aborted and logged.")
-            st.experimental_rerun()
+            st.rerun()
 
     # Main status display logic
     def seconds_left(target_iso):
@@ -186,10 +186,10 @@ with col1:
             # begin warning, show countdown
             st.session_state.status = "warning"
             st.session_state.warning_ends_at = (datetime.now() + timedelta(seconds=int(warning_sec))).isoformat()
-            st.experimental_rerun()
+            st.rerun()
 
         # lightweight tick
-        st.experimental_rerun()
+        st.rerun()
 
     elif st.session_state.status == "warning":
         left = seconds_left(st.session_state.warning_ends_at)
@@ -199,8 +199,8 @@ with col1:
             st.session_state.status = "break"
             st.session_state.break_ends_at = (datetime.now() + timedelta(minutes=int(break_min))).isoformat()
             st.session_state.break_locked = True
-            st.experimental_rerun()
-        st.experimental_rerun()
+            st.rerun()
+        st.rerun()
 
     elif st.session_state.status == "break":
         left = seconds_left(st.session_state.break_ends_at)
@@ -233,7 +233,7 @@ with col1:
                 st.session_state.status = "aborted"
                 st.session_state.break_locked = False
                 st.success("Break aborted and session logged.")
-                st.experimental_rerun()
+                st.rerun()
             else:
                 st.error("Incorrect password. Break continues.")
         # When break ends normally:
@@ -250,7 +250,7 @@ with col1:
             st.session_state.status = "completed"
             st.session_state.break_locked = False
             st.success("Break finished. Logged completed session.")
-            st.experimental_rerun()
+            st.rerun()
 
         # Use JS to speak the current exercise/quote (small TTS)
         if "tts_toggle" not in st.session_state:
