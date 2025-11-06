@@ -83,6 +83,35 @@ def verify_password(password: str):
 
 # ---------- Streamlit UI ----------
 st.set_page_config(page_title="FocusMate Web", layout="centered")
+st.markdown("""
+<style>
+body {
+    background-color: #e9f2ff;
+}
+.stApp {
+    background-color: #f9fbfe;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+.stButton>button {
+    background-color: #2c7be5;
+    color: white;
+    border-radius: 10px;
+    height: 3em;
+    width: 100%;
+    font-size: 16px;
+}
+.stButton>button:hover {
+    background-color: #1a5fc1;
+}
+h1, h2, h3, h4 {
+    color: #2c3e50;
+    text-align: center;
+}
+</style>
+""", unsafe_allow_html=True)
+
 
 create_password_store_if_missing()
 
