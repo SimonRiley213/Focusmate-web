@@ -1,3 +1,51 @@
+import streamlit as st
+import json
+import time
+from datetime import datetime, timedelta
+
+st.set_page_config(page_title="FocusMate Web", layout="centered")
+
+# ----- ADD THIS FOR INSTALLABLE APP -----
+st.markdown("""
+<link rel="manifest" href="manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+      .then(function() { console.log("Service Worker Registered"); });
+  }
+</script>
+""", unsafe_allow_html=True)
+
+# ----- ADD THIS FOR AUTO TTS -----
+def speak_text_js(text):
+    js_code = f"""
+    <script>
+      var u = new SpeechSynthesisUtterance({json.dumps(text)});
+      u.lang = 'en-US';
+      u.rate = 1.0;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+    </script>
+    """
+    st.components.v1.html(js_code, height=0)
+
+# Later in your break section, replace the manual “Speak” button with:
+if st.session_state.status == "break":
+    left = seconds_left(st.session_state.break_ends_at)
+    mins = left // 60
+    secs = left % 60
+    st.markdown(f"## 🛑 Break — time remaining: **{mins:02d}:{secs:02d}**")
+
+    exercise = EXERCISES[int((datetime.now().second // 5) % len(EXERCISES))]
+    quote = QUOTES[int((datetime.now().second // 7) % len(QUOTES))]
+    st.write("**Exercise:**", exercise)
+    st.write("**Quote:**", quote)
+
+    # Speak automatically once
+    if "spoken" not in st.session_state:
+        speak_text_js(f"{exercise}. {quote}")
+        st.session_state.spoken = True
+
 # app.py
 import streamlit as st
 from datetime import datetime, timedelta
